@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>random dog image</title>
+    <link rel="stylesheet" href="mystyle.css">
+</head>
+
+<body>
+    <main id="main-body">
+        <p id="mywatch"></p>
+        <header id="header">
+            <button onclick="get_new_dog()">Random Dog</button>
+            <p id="text">click to show a random dog picture</p>
+        </header>
+        <div class="imgbox">
+            <img id="dogimg" src="https://images.dog.ceo/breeds/bulldog-english/bunz.jpg">
+        </div>
+    </main>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <script>
+        var timeout = 8000;
+        document.getElementById("mywatch").innerHTML = timeout / 1000;
+
+        function get_new_dog() {
+            get_dog();
+        }
+
+        function get_dog() {
+            document.getElementById("mywatch").innerHTML = timeout / 1000;
+            clearTimeout(mywatch);
+            clearTimeout(mytime);
+            document.getElementById("text").innerHTML = "please wait ...";
+            $.ajax({
+                url: "https://dog.ceo/api/breed/retriever/images/random",
+                success: function (result) {
+                    document.getElementById("dogimg").src = result.message;
+                    document.getElementById("text").innerHTML = "successfull , click to show a random dog picture";
+                },
+                error: function (e) {
+                    document.getElementById("text").innerHTML = "Unsuccessfull , please try again";
+                }
+            });
+            mytime = setTimeout(showpic, timeout);
+            mywatch = setTimeout(watchsec, 1000);
+        }
+
+        var mytime = setTimeout(showpic, timeout);
+        function showpic() {
+            get_dog();
+        }
+
+        var mywatch = setTimeout(watchsec, 1000);
+        function watchsec() {
+            clearTimeout(mywatch);
+            var elem = document.getElementById("mywatch").innerHTML;
+            if (parseInt(elem) > 0) {
+                document.getElementById("mywatch").innerHTML = parseInt(elem) - 1;
+            } else {
+                elem = timeout / 1000;
+            }
+            mywatch = setTimeout(watchsec, 1000);
+        }
+    </script>
+</body>
+
+</html>
